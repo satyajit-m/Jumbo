@@ -1,0 +1,139 @@
+#include<iostream>
+#include<math.h>
+using namespace std;
+const int n=5;
+void bin(int a,int b[])
+{
+	int i;
+	if(a>0)
+		b[0]=0;
+	else
+	{
+		b[0]=1;
+		a=-a;
+	}
+	for(i=n-1;i>0;i--)
+	{
+		b[i]=a%2;
+		a=a/2;
+	}
+	if(b[0]==1)
+	{
+		i=n-1;
+		while(b[i]!=1)
+			i--;
+		for(i=--i;i>0;i--)
+		{
+			if(b[i]==1)
+				b[i]=0;
+			else
+				b[i]=1;
+		}
+	}
+}
+void un2s(int a[],int b[])
+{
+	int i=n-1;
+	if(a[0]==1)
+	{
+		while(b[i]!=1&&i>=0)
+			i--;
+		if(i!=-1)
+		{
+			for(i=i-1;i>=0;i--)
+			{
+				if(b[i]==1)
+					b[i]=0;
+				else
+					b[i]=1;
+			}
+			for(i=n-1;i>=0;i--)
+			{
+				if(a[i]==1)
+					a[i]=0;
+				else
+					a[i]=1;
+			}
+		}
+		else
+		{
+			while(a[i]!=1||i>=0)
+			i--;
+			for(i=i-1;i>=0;i--)
+			{
+				if(a[i]==1)
+					a[i]=0;
+				else
+					a[i]=1;
+			}
+		}
+	}
+}
+void sum(int a[],int b[])
+{
+	int i=n-1,c=0;
+	while(i>=0)
+	{
+		if(a[i]!=b[i])
+		{
+			a[i]=1-c;
+		}
+		else
+		{
+			a[i]=c;
+            c=b[i];
+		}
+		i--;
+	}
+}
+int main()
+{
+	int x,y,i,sc=n,q,Q=0,o=0,c=1;
+	int br[n],qr[n],ac[n]={0,0,0,0,0},Br[n];
+	cin>>x>>y;
+	bin(x,br);
+	bin(y,qr);
+	i=n-1;
+	while(br[i]!=1)
+	{
+		Br[i]=br[i];
+		i--;
+	}
+	Br[i]=br[i];
+	for(i=--i;i>=0;i--)
+	{
+		if(br[i]==1)
+			Br[i]=0;
+		else
+			Br[i]=1;
+	}
+	while(sc>0)
+	{
+		sc--;
+		q=qr[n-1];
+		if(Q!=q)
+		{
+			if(Q==0)
+				sum(ac,Br);
+			else
+				sum(ac,br);
+		}
+		Q=qr[n-1];
+		for(i=n-1;i>0;i--)
+			qr[i]=qr[i-1];
+		qr[0]=ac[n-1];
+		for(i=n-1;i>0;i--)
+			ac[i]=ac[i-1];
+		q=qr[n-1];
+	}
+	if(ac[0]==1)
+		c=-1;
+	un2s(ac,qr);
+	for(i=1;i<n;i++)
+		o+=ac[i]*pow(2,(n+n-1-i));
+	for(i=0;i<n;i++)
+		o+=qr[i]*pow(2,(n-1-i));
+	o*=c;
+	cout<<o;
+	return 0;
+}
